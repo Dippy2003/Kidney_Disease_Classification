@@ -67,12 +67,16 @@ class ConfigurationManager:
             Path(training.root_dir)
         ])
 
+        # Guard against missing / empty values in params.yaml
+        # (e.g., `EPOCHS:` with no value parses as None in YAML)
+        params_epochs = params.EPOCHS if params.EPOCHS is not None else 1
+
         training_config = TrainingConfig(
             root_dir=Path(training.root_dir),
             trained_model_path=Path(training.trained_model_path),
             updated_base_model_path=Path(prepare_base_model.updated_base_model_path),
             training_data=Path(training_data),
-            params_epochs=params.EPOCHS,
+            params_epochs=params_epochs,
             params_batch_size=params.BATCH_SIZE,
             params_is_augmentation=params.AUGMENTATION,
             params_image_size=params.IMAGE_SIZE
@@ -86,10 +90,11 @@ class ConfigurationManager:
         eval_config = EvaluationConfig(
             path_of_model="artifacts/training/model.h5",
             training_data="artifacts/data_ingestion/kidney-ct-scan-image",
-            mlflow_uri="https://dagshub.com/entbappy/Kidney-Disease-Classification-MLflow-DVC.mlflow",
+            mlflow_uri="https://dagshub.com/Dippy2003/Kidney_Disease_Classification.mlflow",
             all_params=self.params,
             params_image_size=self.params.IMAGE_SIZE,
             params_batch_size=self.params.BATCH_SIZE
         )
         return eval_config
+       
 
