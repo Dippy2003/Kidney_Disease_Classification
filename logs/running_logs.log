@@ -741,3 +741,10 @@ OSError: No file or directory found at model\model.h5
 [2026-02-05 09:53:43,096: WARNING: polymorphic_function: 5 out of the last 5 calls to <function Model.make_predict_function.<locals>.predict_function at 0x000002577137B700> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.]
 [2026-02-05 09:53:43,103: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:53:43] "POST /predict HTTP/1.1" 200 -]
 [2026-02-05 09:56:19,575: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:56:19] "GET / HTTP/1.1" 200 -]
+[2026-02-05 09:56:45,872: INFO: _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001]
+[2026-02-05 09:56:45,872: INFO: _internal: [33mPress CTRL+C to quit[0m]
+[2026-02-05 09:56:48,038: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:56:48] "GET / HTTP/1.1" 200 -]
+[2026-02-05 09:56:48,680: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:56:48] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -]
+[2026-02-05 09:56:55,376: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:56:55] "POST /predict HTTP/1.1" 200 -]
+[2026-02-05 09:57:09,622: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 09:57:09] "POST /predict HTTP/1.1" 200 -]
