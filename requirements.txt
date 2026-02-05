@@ -1,6 +1,6 @@
 tensorflow>=2.12.0
 pandas
-# dvc  # omit: pulls databricks-cli which fails on Python 3.12+ (imp removed). Use conda install dvc if needed.
+dvc  # omit: pulls databricks-cli which fails on Python 3.12+ (imp removed). Use conda install dvc if needed.
 mlflow>=2.2.2
 notebook
 numpy
