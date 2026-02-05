@@ -7,6 +7,10 @@ from cnnClassifier.pipeline.prediction import PredictionPipeline
 os.putenv('LANG', 'en_US.UTF-8')
 os.putenv('LC_ALL', 'en_US.UTF-8')
 
+# Project root (where app.py lives) — save/load image here so paths match in prediction
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+INPUT_IMAGE_PATH = os.path.join(ROOT_DIR, "inputImage.jpg")
+
 app = Flask(__name__)
 CORS(app)
 
@@ -14,6 +18,7 @@ CORS(app)
 class ClientApp:
     def __init__(self):
         self.filename = "inputImage.jpg"
+        self.input_path = INPUT_IMAGE_PATH
         self.classifier = PredictionPipeline(self.filename)
 
 @app.route("/", methods=['GET'])
@@ -34,7 +39,7 @@ def trainRoute():
 @cross_origin()
 def predictRoute():
     image = request.json['image']
-    decodeImage(image, clApp.filename)
+    decodeImage(image, clApp.input_path)
     result = clApp.classifier.predict()
     return jsonify(result)
 
