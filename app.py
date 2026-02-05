@@ -1,5 +1,11 @@
-from flask import Flask, request, jsonify, render_template
 import os
+import sys
+
+# Add src to path so "python app.py" finds cnnClassifier
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(ROOT_DIR, "src"))
+
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 from cnnClassifier.utils.common import decodeImage
 from cnnClassifier.pipeline.prediction import PredictionPipeline
@@ -7,8 +13,7 @@ from cnnClassifier.pipeline.prediction import PredictionPipeline
 os.putenv('LANG', 'en_US.UTF-8')
 os.putenv('LC_ALL', 'en_US.UTF-8')
 
-# Project root (where app.py lives) — save/load image here so paths match in prediction
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Project root — save/load image here so paths match in prediction
 INPUT_IMAGE_PATH = os.path.join(ROOT_DIR, "inputImage.jpg")
 
 app = Flask(__name__)

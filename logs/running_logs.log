@@ -776,3 +776,9 @@ OSError: No file or directory found at model\model.h5
 [2026-02-05 10:12:21,564: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:12:21] "GET / HTTP/1.1" 200 -]
 [2026-02-05 10:12:28,195: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:12:28] "POST /predict HTTP/1.1" 200 -]
 [2026-02-05 10:12:32,057: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:12:32] "POST /predict HTTP/1.1" 200 -]
+[2026-02-05 10:24:16,975: INFO: _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001]
+[2026-02-05 10:24:16,976: INFO: _internal: [33mPress CTRL+C to quit[0m]
+[2026-02-05 10:24:36,811: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:24:36] "GET / HTTP/1.1" 200 -]
+[2026-02-05 10:24:43,432: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:24:43] "POST /predict HTTP/1.1" 200 -]
+[2026-02-05 10:24:47,977: INFO: _internal: 127.0.0.1 - - [05/Feb/2026 10:24:47] "POST /predict HTTP/1.1" 200 -]
