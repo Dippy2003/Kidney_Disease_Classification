@@ -65,3 +65,56 @@ dvc init
 dvc repro
 dvc dag
 ```
+
+## AWS CI/CD Deployment (GitHub Actions)
+
+### 1. Login to AWS console
+
+### 2. Create an IAM user for deployment
+
+With specific access:
+- **EC2** — virtual machine access
+- **ECR** — Elastic Container Registry, to store the Docker image
+
+Deployment flow:
+1. Build a Docker image of the source code
+2. Push the Docker image to ECR
+3. Launch an EC2 instance
+4. Pull the image from ECR onto EC2
+5. Run the Docker container on EC2
+
+Required policies:
+- `AmazonEC2ContainerRegistryFullAccess`
+- `AmazonEC2FullAccess`
+
+### 3. Create an ECR repo to store the Docker image
+
+Save the repository URI for later use in GitHub secrets.
+
+### 4. Create an EC2 machine (Ubuntu)
+
+### 5. Install Docker on the EC2 machine
+
+```bash
+sudo apt-get update -y
+sudo apt-get upgrade
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker ubuntu
+newgrp docker
+```
+
+### 6. Configure EC2 as a self-hosted GitHub Actions runner
+
+Settings → Actions → Runners → New self-hosted runner → choose OS → run the setup commands.
+
+### 7. Set up GitHub secrets
+
+```
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=us-east-1
+AWS_ECR_LOGIN_URI=<account-id>.dkr.ecr.<region>.amazonaws.com
+ECR_REPOSITORY_NAME=<your-repo-name>
+```
