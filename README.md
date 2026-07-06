@@ -38,3 +38,30 @@ python app.py
 ```
 
 Then open the local host and port shown in the terminal.
+
+## MLflow & DVC
+
+- **MLflow** — production-grade experiment tracking, logging and tagging models. [Docs](https://mlflow.org/docs/latest/index.html)
+- **DVC** — lightweight pipeline orchestration and experiment tracking, good for POCs.
+
+### MLflow (via DagsHub)
+
+Set the following as environment variables (get credentials from your DagsHub account — do not hardcode them):
+
+```bash
+export MLFLOW_TRACKING_URI=https://dagshub.com/Dippy2003/Kidney_Disease_Classification.mlflow
+export MLFLOW_TRACKING_USERNAME=<your-dagshub-username>
+export MLFLOW_TRACKING_PASSWORD=<your-dagshub-token>
+```
+
+```bash
+mlflow ui
+```
+
+### DVC commands
+
+```bash
+dvc init
+dvc repro
+dvc dag
+```
