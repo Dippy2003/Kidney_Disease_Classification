@@ -7,26 +7,31 @@
     <title>Kidney CT Scan Classification | AI-Powered Detection</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0f1419;
-            --bg-card: #1a1f26;
-            --bg-elevated: #232a33;
-            --accent: #00c9a7;
-            --accent-dim: rgba(0, 201, 167, 0.15);
-            --text-primary: #e6edf3;
-            --text-muted: #8b949e;
-            --border: #30363d;
-            --danger: #f85149;
-            --success: #3fb950;
-            --radius: 12px;
-            --radius-sm: 8px;
+            --bg-primary: #06080c;
+            --bg-card: rgba(26, 31, 38, 0.55);
+            --bg-elevated: rgba(35, 42, 51, 0.65);
+            --accent: #00e5b3;
+            --accent-2: #6c5ce7;
+            --accent-3: #00b4ff;
+            --accent-dim: rgba(0, 229, 179, 0.15);
+            --text-primary: #eef3f7;
+            --text-muted: #8b96a3;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ff5d6c;
+            --success: #2ee6a6;
+            --radius: 16px;
+            --radius-sm: 10px;
         }
 
         * {
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -35,67 +40,264 @@
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated aurora / mesh background */
+        .aurora {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .aurora::before,
+        .aurora::after {
+            content: '';
+            position: absolute;
+            width: 60vmax;
+            height: 60vmax;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.35;
+        }
+
+        .aurora::before {
+            top: -20vmax;
+            left: -10vmax;
+            background: radial-gradient(circle, var(--accent-2), transparent 70%);
+            animation: drift1 22s ease-in-out infinite alternate;
+        }
+
+        .aurora::after {
+            bottom: -25vmax;
+            right: -15vmax;
+            background: radial-gradient(circle, var(--accent-3), transparent 70%);
+            animation: drift2 26s ease-in-out infinite alternate;
+        }
+
+        .aurora .blob3 {
+            position: absolute;
+            top: 30%;
+            right: 10%;
+            width: 45vmax;
+            height: 45vmax;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent), transparent 70%);
+            filter: blur(120px);
+            opacity: 0.18;
+            animation: drift3 30s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10vmax, 8vmax) scale(1.15); }
+        }
+
+        @keyframes drift2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-8vmax, -10vmax) scale(1.2); }
+        }
+
+        @keyframes drift3 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-6vmax, 6vmax) scale(0.9); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
         .page-wrap {
-            max-width: 1100px;
+            max-width: 1120px;
             margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
+            padding: 2.5rem 1.5rem 5rem;
+            position: relative;
+        }
+
+        /* Nav */
+        .nav-mod {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            animation: fadeDown 0.7s ease both;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-brand .logo-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 12px 2px var(--accent);
+            animation: pulseDot 2.4s ease-in-out infinite;
+        }
+
+        .nav-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav-status .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
         }
 
         /* Hero */
         .hero {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
         }
 
         .hero .badge-top {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             color: var(--accent);
             background: var(--accent-dim);
-            padding: 0.35rem 0.75rem;
+            border: 1px solid rgba(0, 229, 179, 0.25);
+            padding: 0.4rem 0.85rem;
             border-radius: 999px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            animation: fadeUp 0.6s ease both;
         }
 
         .hero h1 {
-            font-size: clamp(1.75rem, 4vw, 2.25rem);
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 0.85rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(120deg, #ffffff 30%, var(--accent) 55%, var(--accent-3) 75%, #ffffff 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeUp 0.7s ease 0.05s both, shimmer 6s linear infinite;
         }
 
         .hero .subtitle {
             color: var(--text-muted);
-            font-size: 1.05rem;
-            max-width: 560px;
+            font-size: 1.08rem;
+            max-width: 580px;
             margin: 0 auto;
+            animation: fadeUp 0.7s ease 0.15s both;
+        }
+
+        @keyframes shimmer {
+            to { background-position: -250% center; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Cards */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 860px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
         .card-mod {
             background: var(--bg-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1.5rem;
+            padding: 1.75rem;
             margin-bottom: 1.5rem;
+            position: relative;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .card-mod:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 229, 179, 0.3);
+            box-shadow: 0 20px 50px -20px rgba(0, 229, 179, 0.25);
         }
 
         .card-mod h3 {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 700;
             margin-bottom: 0.35rem;
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-mod .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .card-mod .desc {
             font-size: 0.875rem;
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
         }
 
         /* Upload / preview area */
@@ -109,6 +311,17 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
+            transition: border-color 0.25s ease, background 0.25s ease;
+            cursor: pointer;
+        }
+
+        .preview-box:hover {
+            border-color: rgba(0, 229, 179, 0.45);
+        }
+
+        .preview-box.drag-over {
+            border-color: var(--accent);
+            background: rgba(0, 229, 179, 0.08);
         }
 
         .preview-box.has-image {
@@ -123,10 +336,17 @@
             width: auto;
             height: auto;
             object-fit: contain;
+            animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.94); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .preview-box #video {
             display: block;
+            pointer-events: none;
         }
 
         .preview-box #photo {
@@ -148,10 +368,22 @@
             padding: 1rem;
         }
 
+        .placeholder-text svg {
+            display: block;
+            margin: 0 auto 0.75rem;
+            opacity: 0.5;
+            animation: floatY 3s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
         .btn-group-mod {
             display: flex;
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-top: 1.1rem;
             flex-wrap: wrap;
         }
 
@@ -159,42 +391,51 @@
             font-family: inherit;
             font-weight: 600;
             font-size: 0.9rem;
-            padding: 0.6rem 1.25rem;
+            padding: 0.65rem 1.35rem;
             border-radius: var(--radius-sm);
             border: none;
             cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease, box-shadow 0.25s ease, filter 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-mod:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
+        }
+
+        .btn-mod:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .btn-primary-mod {
-            background: var(--accent);
-            color: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
         .btn-primary-mod:hover {
-            background: #00b894;
-            color: var(--bg-primary);
-            box-shadow: 0 4px 14px rgba(0, 201, 167, 0.35);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
         }
 
         .btn-success-mod {
-            background: var(--success);
-            color: var(--bg-primary);
+            background: linear-gradient(120deg, var(--accent), var(--accent-3));
+            background-size: 200% auto;
+            color: #041b16;
+            box-shadow: 0 4px 20px -4px rgba(0, 229, 179, 0.5);
         }
 
-        .btn-success-mod:hover {
-            background: #2ea043;
-            color: var(--bg-primary);
-            box-shadow: 0 4px 14px rgba(63, 185, 80, 0.35);
+        .btn-success-mod:hover:not(:disabled) {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px -4px rgba(0, 229, 179, 0.65);
         }
 
         /* Results */
         .results-card .desc {
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
         }
 
         .result-placeholder {
@@ -206,27 +447,56 @@
             border-radius: var(--radius-sm);
             color: var(--text-muted);
             font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
+            transition: opacity 0.25s ease;
         }
 
         .result-value {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
+            gap: 0.6rem;
+            padding: 1.25rem;
             border-radius: var(--radius-sm);
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.01em;
+            animation: resultReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes resultReveal {
+            from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .result-value .ring {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .result-value.normal {
-            background: rgba(63, 185, 80, 0.15);
+            background: rgba(46, 230, 166, 0.12);
             color: var(--success);
+            border: 1px solid rgba(46, 230, 166, 0.3);
+        }
+
+        .result-value.normal .ring {
+            background: var(--success);
+            box-shadow: 0 0 14px 2px var(--success);
         }
 
         .result-value.tumor {
-            background: rgba(248, 81, 73, 0.15);
+            background: rgba(255, 93, 108, 0.12);
             color: var(--danger);
+            border: 1px solid rgba(255, 93, 108, 0.3);
+        }
+
+        .result-value.tumor .ring {
+            background: var(--danger);
+            box-shadow: 0 0 14px 2px var(--danger);
         }
 
         .result-raw {
@@ -234,9 +504,11 @@
             padding: 1rem;
             background: var(--bg-elevated);
             border-radius: var(--radius-sm);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            animation: fadeUp 0.4s ease both;
         }
 
         .result-raw pre {
@@ -245,30 +517,117 @@
             word-break: break-word;
         }
 
+        /* Progress bar during predict */
+        .progress-track {
+            height: 3px;
+            width: 100%;
+            background: var(--bg-elevated);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 0.9rem;
+            display: none;
+        }
+
+        .progress-track.active {
+            display: block;
+        }
+
+        .progress-track .bar {
+            height: 100%;
+            width: 40%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--accent-3), transparent);
+            animation: scanBar 1.1s ease-in-out infinite;
+        }
+
+        @keyframes scanBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(350%); }
+        }
+
         /* How it works */
         .how-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
+            margin-top: 3.5rem;
+            padding-top: 2.5rem;
             border-top: 1px solid var(--border);
         }
 
         .how-section h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
         }
 
-        .how-section p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+        .steps-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 760px) {
+            .steps-row { grid-template-columns: 1fr; }
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(108, 92, 231, 0.4);
+        }
+
+        .step-card .icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--accent-2);
             margin-bottom: 0.75rem;
         }
 
-        .how-section ul {
+        .step-card h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .step-card p {
+            font-size: 0.82rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            padding-left: 1.25rem;
-            margin-bottom: 0;
+            margin: 0;
+        }
+
+        .how-section .note {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            padding: 0.9rem 1.1rem;
+            border-left: 3px solid var(--accent-2);
+        }
+
+        .how-section .note code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        footer.page-footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
         }
 
         /* Loading overlay */
@@ -276,19 +635,38 @@
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: rgba(15, 20, 25, 0.85);
+            background: rgba(6, 8, 12, 0.85);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        #loading.visible {
+            opacity: 1;
+            pointer-events: all;
         }
 
         #loading .loader {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border: 3px solid var(--border);
             border-top-color: var(--accent);
+            border-right-color: var(--accent-3);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        #loading .loading-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.02em;
         }
 
         @keyframes spin {
@@ -304,88 +682,163 @@
             width: 0.1px;
             height: 0.1px;
         }
-
-        input#url {
-            position: absolute;
-            left: -9999px;
-        }
     </style>
 </head>
 <body>
+    <div class="aurora"><div class="blob3"></div></div>
+    <div class="grain"></div>
+
     <div class="page-wrap">
+        <nav class="nav-mod">
+            <div class="nav-brand">
+                <span class="logo-dot"></span>
+                KidneyAI
+            </div>
+            <div class="nav-status">
+                <span class="dot"></span>
+                Model online
+            </div>
+        </nav>
+
         <header class="hero">
-            <span class="badge-top">Deep Learning</span>
+            <span class="badge-top">✦ Deep Learning · CNN</span>
             <h1>Kidney CT Scan Classification</h1>
             <p class="subtitle">
                 Upload a kidney CT scan image. Our CNN model will classify it as <strong>Normal</strong> or <strong>Tumor</strong> to support clinical assessment.
             </p>
         </header>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card-mod">
-                    <h3>Upload CT scan image</h3>
-                    <p class="desc">
-                        Use a kidney CT slice (e.g. JPEG/PNG). The model expects 224×224 input; images are resized automatically.
-                    </p>
-                    <div class="preview-box" id="previewBox">
-                        <video autoplay playsinline muted id="video" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect fill='%23232a33' width='300' height='200'/%3E%3Ctext fill='%238b949e' font-family='sans-serif' font-size='14' x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'%3ENo image selected%3C/text%3E%3C/svg%3E"></video>
-                        <img src="" id="photo" alt="Preview">
-                        <canvas style="display:none;" id="canvas"></canvas>
+        <div class="grid-2">
+            <div class="card-mod reveal">
+                <h3><span class="step-num">01</span> Upload CT scan image</h3>
+                <p class="desc">
+                    Drag &amp; drop or choose a kidney CT slice (JPEG/PNG). The model expects 224×224 input; images are resized automatically.
+                </p>
+                <div class="preview-box" id="previewBox">
+                    <video autoplay playsinline muted id="video" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect fill='transparent' width='300' height='200'/%3E%3C/svg%3E"></video>
+                    <div class="placeholder-text" id="placeholderText">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        Drag &amp; drop an image, or click to browse
                     </div>
-                    <div class="btn-group-mod">
-                        <button type="button" class="btn-mod btn-primary-mod" id="uload">Choose image</button>
-                        <button type="button" class="btn-mod btn-success-mod" id="send">Predict</button>
-                    </div>
-                    <input type="file" id="fileinput" accept="image/*"/>
-                    <input type="hidden" id="url" value="/predict"/>
+                    <img src="" id="photo" alt="Preview">
+                    <canvas style="display:none;" id="canvas"></canvas>
                 </div>
+                <div class="btn-group-mod">
+                    <button type="button" class="btn-mod btn-primary-mod" id="uload">Choose image</button>
+                    <button type="button" class="btn-mod btn-success-mod" id="send" disabled>Predict</button>
+                </div>
+                <input type="file" id="fileinput" accept="image/*"/>
+                <input type="hidden" id="url" value="/predict"/>
             </div>
 
-            <div class="col-lg-6">
-                <div class="card-mod results-card">
-                    <h3>Prediction result</h3>
-                    <p class="desc">
-                        The model outputs one of two classes: <strong>Normal</strong> (no tumor) or <strong>Tumor</strong>. This is for research support only—always confirm with a healthcare provider.
-                    </p>
-                    <div class="result-placeholder" id="resultPlaceholder">
-                        Run a prediction to see the result here.
-                    </div>
-                    <div id="resultValue" class="result-value" style="display: none;"></div>
-                    <div class="result-raw" id="resultRaw" style="display: none;"></div>
+            <div class="card-mod results-card reveal">
+                <h3><span class="step-num">02</span> Prediction result</h3>
+                <p class="desc">
+                    The model outputs one of two classes: <strong>Normal</strong> (no tumor) or <strong>Tumor</strong>. This is for research support only — always confirm with a healthcare provider.
+                </p>
+                <div class="result-placeholder" id="resultPlaceholder">
+                    Run a prediction to see the result here.
                 </div>
+                <div id="resultValue" class="result-value" style="display: none;"></div>
+                <div class="progress-track" id="progressTrack"><div class="bar"></div></div>
+                <div class="result-raw" id="resultRaw" style="display: none;"></div>
             </div>
         </div>
 
-        <section class="how-section">
+        <section class="how-section reveal">
             <h2>How it works</h2>
-            <p>
-                This app uses a convolutional neural network (CNN) trained on kidney CT scan images. The pipeline:
-            </p>
-            <ul>
-                <li>Resizes your image to 224×224 pixels</li>
-                <li>Runs it through the trained model</li>
-                <li>Returns a class: <strong>Normal</strong> or <strong>Tumor</strong></li>
-            </ul>
-            <p>
+            <div class="steps-row">
+                <div class="step-card">
+                    <div class="icon-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    </div>
+                    <h4>Resize</h4>
+                    <p>Your image is resized to 224×224 pixels to match the model's input shape.</p>
+                </div>
+                <div class="step-card">
+                    <div class="icon-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    </div>
+                    <h4>Inference</h4>
+                    <p>A trained convolutional neural network runs a forward pass on the scan.</p>
+                </div>
+                <div class="step-card">
+                    <div class="icon-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    </div>
+                    <h4>Classify</h4>
+                    <p>Returns a class: <strong>Normal</strong> or <strong>Tumor</strong>, shown instantly above.</p>
+                </div>
+            </div>
+            <div class="note">
                 Ensure you have run training (or pulled the model via DVC) so that <code>artifacts/training/model.h5</code> exists before using Predict.
-            </p>
+            </div>
         </section>
+
+        <footer class="page-footer">Kidney CT Scan Classification &middot; Built with TensorFlow, Flask &amp; DVC</footer>
     </div>
 
-    <div id="loading" style="display: none;">
+    <div id="loading">
         <div class="loader"></div>
+        <div class="loading-text">Running inference…</div>
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script>
         var myvideo = document.getElementById('video');
-        var mycanvas = document.getElementById('canvas');
         var myphoto = document.getElementById('photo');
+        var placeholderText = document.getElementById('placeholderText');
+        var previewBox = document.getElementById('previewBox');
+        var fileInput = document.getElementById('fileinput');
+        var sendBtn = document.getElementById('send');
         var base_data = '';
+
+        // Reveal-on-scroll
+        var revealEls = document.querySelectorAll('.reveal');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function(el) { observer.observe(el); });
+
+        function setLoading(isLoading) {
+            var loadingEl = document.getElementById('loading');
+            var progress = document.getElementById('progressTrack');
+            if (isLoading) {
+                loadingEl.classList.add('visible');
+                progress.classList.add('active');
+            } else {
+                loadingEl.classList.remove('visible');
+                progress.classList.remove('active');
+            }
+        }
+
+        function loadFile(file) {
+            if (!file || !file.type.match('image.*')) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var url = e.target.result;
+                var img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.onload = function() {
+                    var canvas = document.createElement('CANVAS');
+                    var ctx = canvas.getContext('2d');
+                    canvas.height = this.height;
+                    canvas.width = this.width;
+                    ctx.drawImage(this, 0, 0);
+                    base_data = canvas.toDataURL('image/jpeg', 1.0).replace(/^data:image.+;base64,/, '');
+                };
+                img.src = url;
+                myphoto.src = url;
+                placeholderText.style.display = 'none';
+                previewBox.classList.add('has-image');
+                sendBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
 
         function sendRequest(base64Data) {
             if (!base64Data || base64Data === '') {
@@ -393,71 +846,80 @@
                 return;
             }
 
-            var url = $('#url').val();
-            $('#loading').show();
-            $('#resultPlaceholder').hide();
-            $('#resultValue').hide();
-            $('#resultRaw').hide();
+            var url = document.getElementById('url').value;
+            setLoading(true);
+            document.getElementById('resultPlaceholder').style.display = 'none';
+            document.getElementById('resultValue').style.display = 'none';
+            document.getElementById('resultRaw').style.display = 'none';
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                cache: false,
-                async: true,
-                crossDomain: true,
+            fetch(url, {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                data: JSON.stringify({ image: base64Data }),
-                success: function(res) {
-                    var pred = res && res[0] && res[0].image ? res[0].image : null;
-                    if (pred) {
-                        var $val = $('#resultValue');
-                        $val.removeClass('normal tumor').addClass(pred.toLowerCase());
-                        $val.html('<span>' + pred + '</span>').show();
-                    }
-                    $('#resultRaw').html('<pre>' + JSON.stringify(res, null, 2) + '</pre>').show();
-                    $('#loading').hide();
-                },
-                error: function(xhr, status, err) {
-                    $('#loading').hide();
-                    $('#resultPlaceholder').text('Request failed: ' + (err || status)).show();
-                    $('#resultRaw').html('<pre>Error: ' + (xhr.responseText || err) + '</pre>').show();
+                body: JSON.stringify({ image: base64Data })
+            })
+            .then(function(res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function(res) {
+                var pred = res && res[0] && res[0].image ? res[0].image : null;
+                if (pred) {
+                    var valEl = document.getElementById('resultValue');
+                    valEl.className = 'result-value ' + pred.toLowerCase();
+                    valEl.innerHTML = '<span class="ring"></span><span>' + pred + '</span>';
+                    valEl.style.display = 'flex';
                 }
+                document.getElementById('resultRaw').innerHTML = '<pre>' + JSON.stringify(res, null, 2) + '</pre>';
+                document.getElementById('resultRaw').style.display = 'block';
+                setLoading(false);
+            })
+            .catch(function(err) {
+                setLoading(false);
+                var placeholder = document.getElementById('resultPlaceholder');
+                placeholder.textContent = 'Request failed: ' + err.message;
+                placeholder.style.display = 'flex';
+                var rawEl = document.getElementById('resultRaw');
+                rawEl.innerHTML = '<pre>Error: ' + err.message + '</pre>';
+                rawEl.style.display = 'block';
             });
         }
 
-        $(document).ready(function() {
-            $('#send').on('click', function() {
-                sendRequest(base_data);
-            });
+        document.getElementById('send').addEventListener('click', function() {
+            sendRequest(base_data);
+        });
 
-            $('#uload').on('click', function() {
-                $('#fileinput').trigger('click');
-            });
+        document.getElementById('uload').addEventListener('click', function() {
+            fileInput.click();
+        });
 
-            $('#fileinput').on('change', function() {
-                if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        var url = e.target.result;
-                        var img = new Image();
-                        img.crossOrigin = 'Anonymous';
-                        img.onload = function() {
-                            var canvas = document.createElement('CANVAS');
-                            var ctx = canvas.getContext('2d');
-                            canvas.height = this.height;
-                            canvas.width = this.width;
-                            ctx.drawImage(this, 0, 0);
-                            base_data = canvas.toDataURL('image/jpeg', 1.0).replace(/^data:image.+;base64,/, '');
-                        };
-                        img.src = url;
-                        myphoto.src = url;
-                        myphoto.style.display = 'block';
-                        myvideo.style.display = 'none';
-                        document.getElementById('previewBox').classList.add('has-image');
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                }
+        previewBox.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) loadFile(this.files[0]);
+        });
+
+        ['dragenter', 'dragover'].forEach(function(evt) {
+            previewBox.addEventListener(evt, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                previewBox.classList.add('drag-over');
             });
+        });
+
+        ['dragleave', 'drop'].forEach(function(evt) {
+            previewBox.addEventListener(evt, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                previewBox.classList.remove('drag-over');
+            });
+        });
+
+        previewBox.addEventListener('drop', function(e) {
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                loadFile(e.dataTransfer.files[0]);
+            }
         });
     </script>
 </body>
